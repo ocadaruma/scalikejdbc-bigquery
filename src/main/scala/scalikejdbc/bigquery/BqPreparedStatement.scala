@@ -9,9 +9,14 @@ import java.util.Calendar
 import scala.collection.concurrent.TrieMap
 import scala.collection.mutable
 
+/**
+ * A PreparedStatement implementation that just holds parameters and indices.
+ */
 class BqPreparedStatement extends PreparedStatement {
 
   private[this] val parameterMap: mutable.Map[Int, BqParameter] = TrieMap.empty
+
+  def parameters: Map[Int, BqParameter] = parameterMap.toMap
 
   def setByte(parameterIndex: Int, x: Byte): Unit =
     parameterMap(parameterIndex) = BqParameter.Int64(x)
