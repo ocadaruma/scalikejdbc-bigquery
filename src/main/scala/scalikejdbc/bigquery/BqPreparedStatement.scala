@@ -10,26 +10,28 @@ import scala.collection.concurrent.TrieMap
 import scala.collection.mutable
 
 /**
- * A PreparedStatement implementation that just holds parameters and indices.
+ * A PreparedStatement implementation just holds parameters and indices.
  */
 class BqPreparedStatement extends PreparedStatement {
 
-  private[this] val parameterMap: mutable.Map[Int, BqParameter] = TrieMap.empty
+  private[this] val parameterBuffer: mutable.Map[Int, BqParameter] = TrieMap.empty
 
-  def parameters: Map[Int, BqParameter] = parameterMap.toMap
+  def parameters: Map[Int, BqParameter] = parameterBuffer.toMap
 
   def setByte(parameterIndex: Int, x: Byte): Unit =
-    parameterMap(parameterIndex) = BqParameter.Int64(x)
+    parameterBuffer(parameterIndex) = BqParameter.Int64(x)
 
-  def getParameterMetaData: ParameterMetaData = ???
+  def getParameterMetaData: ParameterMetaData =
+    throw new UnsupportedOperationException("getParameterMetaData is not supported")
 
   def setRef(parameterIndex: Int, x: Ref): Unit =
     throw new UnsupportedOperationException("setRef is not supported")
 
-  def clearParameters(): Unit = ???
+  def clearParameters(): Unit =
+    throw new UnsupportedOperationException("clearParameters is not supported")
 
   def setBytes(parameterIndex: Int, x: Array[Byte]): Unit =
-    parameterMap(parameterIndex) = BqParameter.Bytes(x)
+    parameterBuffer(parameterIndex) = BqParameter.Bytes(x)
 
   def setBinaryStream(parameterIndex: Int, x: InputStream, length: Int): Unit =
     throw new UnsupportedOperationException("setBinaryStream is not supported")
@@ -58,18 +60,24 @@ class BqPreparedStatement extends PreparedStatement {
   def setObject(parameterIndex: Int, x: scala.Any, targetSqlType: Int, scaleOrLength: Int): Unit =
     throw new UnsupportedOperationException("setObject is not supported")
 
-  def setDate(parameterIndex: Int, x: Date): Unit = ???
+  def setDate(parameterIndex: Int, x: Date): Unit =
+    parameterBuffer(parameterIndex) = BqParameter.Date(x.toLocalDate)
 
-  def setDate(parameterIndex: Int, x: Date, cal: Calendar): Unit = ???
+  // TODO: use calendar
+  def setDate(parameterIndex: Int, x: Date, cal: Calendar): Unit =
+    parameterBuffer(parameterIndex) = BqParameter.Date(x.toLocalDate)
 
-  def setTimestamp(parameterIndex: Int, x: Timestamp): Unit = ???
+  def setTimestamp(parameterIndex: Int, x: Timestamp): Unit =
+    parameterBuffer(parameterIndex) = BqParameter.DateTime(x.toLocalDateTime)
 
-  def setTimestamp(parameterIndex: Int, x: Timestamp, cal: Calendar): Unit = ???
+  def setTimestamp(parameterIndex: Int, x: Timestamp, cal: Calendar): Unit =
+    parameterBuffer(parameterIndex) = BqParameter.Timestamp(x.toInstant.atZone(cal.getTimeZone.toZoneId))
 
   def setUnicodeStream(parameterIndex: Int, x: InputStream, length: Int): Unit =
     throw new UnsupportedOperationException("setUnicodeStream is not supported")
 
-  def getMetaData: ResultSetMetaData = ???
+  def getMetaData: ResultSetMetaData =
+    throw new UnsupportedOperationException("getMetaData is not supported")
 
   def setBlob(parameterIndex: Int, x: Blob): Unit =
     throw new UnsupportedOperationException("setBlob is not supported")
@@ -117,35 +125,38 @@ class BqPreparedStatement extends PreparedStatement {
     throw new UnsupportedOperationException("setSQLXML is not supported")
 
   def setString(parameterIndex: Int, x: String): Unit =
-    parameterMap(parameterIndex) = BqParameter.String(x)
+    parameterBuffer(parameterIndex) = BqParameter.String(x)
 
   def setFloat(parameterIndex: Int, x: Float): Unit =
-    parameterMap(parameterIndex) = BqParameter.Float64(x)
+    parameterBuffer(parameterIndex) = BqParameter.Float64(x)
 
   def setNString(parameterIndex: Int, value: String): Unit =
     throw new UnsupportedOperationException("setNString is not supported")
 
   def setBoolean(parameterIndex: Int, x: Boolean): Unit =
-    parameterMap(parameterIndex) = BqParameter.Bool(x)
+    parameterBuffer(parameterIndex) = BqParameter.Bool(x)
 
   def setDouble(parameterIndex: Int, x: Double): Unit =
-    parameterMap(parameterIndex) = BqParameter.Float64(x)
+    parameterBuffer(parameterIndex) = BqParameter.Float64(x)
 
   def setBigDecimal(parameterIndex: Int, x: BigDecimal): Unit =
-    parameterMap(parameterIndex) = BqParameter.String(x.toPlainString)
+    parameterBuffer(parameterIndex) = BqParameter.String(x.toPlainString)
 
   def executeUpdate(): Int =
     throw new UnsupportedOperationException("executeUpdate is not supported")
 
-  def setTime(parameterIndex: Int, x: Time): Unit = ???
+  def setTime(parameterIndex: Int, x: Time): Unit =
+    parameterBuffer(parameterIndex) = BqParameter.Time(x.toLocalTime)
 
-  def setTime(parameterIndex: Int, x: Time, cal: Calendar): Unit = ???
+  // TODO: use calendar
+  def setTime(parameterIndex: Int, x: Time, cal: Calendar): Unit =
+    parameterBuffer(parameterIndex) = BqParameter.Time(x.toLocalTime)
 
   def setShort(parameterIndex: Int, x: Short): Unit =
-    parameterMap(parameterIndex) = BqParameter.Int64(x)
+    parameterBuffer(parameterIndex) = BqParameter.Int64(x)
 
   def setLong(parameterIndex: Int, x: Long): Unit =
-    parameterMap(parameterIndex) = BqParameter.Int64(x)
+    parameterBuffer(parameterIndex) = BqParameter.Int64(x)
 
   def setCharacterStream(parameterIndex: Int, reader: Reader, length: Int): Unit =
     throw new UnsupportedOperationException("setCharacterStream is not supported")
@@ -165,12 +176,14 @@ class BqPreparedStatement extends PreparedStatement {
   def setClob(parameterIndex: Int, reader: Reader): Unit =
     throw new UnsupportedOperationException("setClob is not supported")
 
-  def setNull(parameterIndex: Int, sqlType: Int): Unit = ???
+  def setNull(parameterIndex: Int, sqlType: Int): Unit =
+    throw new UnsupportedOperationException("setNull is not supported")
 
-  def setNull(parameterIndex: Int, sqlType: Int, typeName: String): Unit = ???
+  def setNull(parameterIndex: Int, sqlType: Int, typeName: String): Unit =
+    throw new UnsupportedOperationException("setNull is not supported")
 
   def setInt(parameterIndex: Int, x: Int): Unit =
-    parameterMap(parameterIndex) = BqParameter.Int64(x)
+    parameterBuffer(parameterIndex) = BqParameter.Int64(x)
 
   def setMaxFieldSize(max: Int): Unit =
     throw new UnsupportedOperationException("setMaxFieldSize is not supported")
@@ -181,7 +194,8 @@ class BqPreparedStatement extends PreparedStatement {
   def getMoreResults(current: Int): Boolean =
     throw new UnsupportedOperationException("getMoreResults is not supported")
 
-  def clearWarnings(): Unit = ???
+  def clearWarnings(): Unit =
+    throw new UnsupportedOperationException("clearWarnings is not supported")
 
   def getGeneratedKeys: ResultSet =
     throw new UnsupportedOperationException("getGeneratedKeys is not supported")

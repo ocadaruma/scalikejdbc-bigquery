@@ -7,13 +7,27 @@ import java.sql.{Array => SqlArray, _}
 import java.util
 import java.util.Calendar
 
-class BqResultSet extends ResultSet {
+import com.google.cloud.bigquery.{FieldValue, QueryResult}
+
+import scala.collection.JavaConverters._
+
+class BqResultSet(underlying: QueryResult) extends ResultSet {
+
+  private[this] val resultIterator: Iterator[Seq[FieldValue]] = underlying.iterateAll().asScala.map(_.asScala)
+  private[this] val columnNameIndexMap: Map[String, Int] = underlying.getSchema.getFields.asScala.zipWithIndex
+    .map { case (field, index) => (field.getName, index) }.toMap
+
+  private[this] var current: Seq[FieldValue] = null
 
   def getType: Int = ???
 
   def isBeforeFirst: Boolean = ???
 
-  def next(): Boolean = ???
+  def next(): Boolean = if (resultIterator.hasNext) {
+    current = resultIterator.next(); true
+  } else {
+    false
+  }
 
   def updateString(columnIndex: Int, x: String): Unit = ???
 
@@ -113,9 +127,11 @@ class BqResultSet extends ResultSet {
 
   def updateBlob(columnLabel: String, inputStream: InputStream): Unit = ???
 
-  def getDouble(columnIndex: Int): Double = ???
+  def getDouble(columnIndex: Int): Double =
+    current(columnIndex).getDoubleValue
 
-  def getDouble(columnLabel: String): Double = ???
+  def getDouble(columnLabel: String): Double =
+    current(columnNameIndexMap(columnLabel)).getDoubleValue
 
   def getArray(columnIndex: Int): SqlArray = ???
 
@@ -159,9 +175,11 @@ class BqResultSet extends ResultSet {
 
   def rowInserted(): Boolean = ???
 
-  def getFloat(columnIndex: Int): Float = ???
+  def getFloat(columnIndex: Int): Float =
+    current(columnIndex).getDoubleValue.toFloat
 
-  def getFloat(columnLabel: String): Float = ???
+  def getFloat(columnLabel: String): Float =
+    current(columnNameIndexMap(columnLabel)).getDoubleValue.toFloat
 
   def getBigDecimal(columnIndex: Int, scale: Int): BigDecimal = ???
 
