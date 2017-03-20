@@ -1,7 +1,7 @@
 package scalikejdbc.bigquery
 
 /**
- * Represents a parameter to be bind to SQL statement.
+ * Represents a parameter to be bound to SQL statement.
  */
 abstract class BqParameter
 
