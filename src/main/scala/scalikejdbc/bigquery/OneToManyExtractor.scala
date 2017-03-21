@@ -20,10 +20,9 @@ class OneToManyExtractor[TOne, TMany, TResult](
 
     rsTraversable.foreach { rs =>
       val one = f(rs)
-      g(rs).foreach { many =>
-        val current = buffer.getOrElse(one, Vector.empty)
-        buffer(one) = current :+ many
-      }
+      val current = buffer.getOrElse(one, Vector.empty)
+
+      buffer(one) = current ++ g(rs).toSeq
     }
 
     buffer.map { case (one, many) =>

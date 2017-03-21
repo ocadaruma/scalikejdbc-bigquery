@@ -14,7 +14,10 @@ trait Runner[A] {
    */
   def statement: SQLSyntax
 
-  def run(queryExecutor: QueryExecutor): Response[A] = ???
+  def run(queryExecutor: QueryExecutor): Response[A] = {
+    val result = mapResultSet(queryExecutor.execute(statement))
+    Response(result)
+  }
 
 //  def runAsync(queryExecutor: QueryExecutor): Future[Response[A]] = {
 //

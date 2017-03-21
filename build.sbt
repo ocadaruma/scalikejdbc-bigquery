@@ -14,5 +14,6 @@ libraryDependencies ++= Seq(
   "com.google.cloud" % "google-cloud-bigquery" % googleCloudVersion % "provided",
   "com.google.cloud" % "google-cloud-bigquery" % googleCloudVersion % "test",
 
-  "org.scalatest" %% "scalatest" % "3.0.1" % "test"
+  "org.scalatest" %% "scalatest" % "3.0.1" % "test",
+  "org.scalamock" %% "scalamock-scalatest-support" % "3.5.0" % "test"
 )
