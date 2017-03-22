@@ -413,10 +413,10 @@ class BqResultSet(underlying: QueryResult) extends ResultSet {
     current(columnNameIndexMap(columnLabel)).getLongValue.toShort
 
   def getObject(columnIndex: Int): AnyRef =
-    throw new UnsupportedOperationException("getObject is not supported")
+    current(columnIndex).getValue
 
   def getObject(columnLabel: String): AnyRef =
-    throw new UnsupportedOperationException("getObject is not supported")
+    current(columnNameIndexMap(columnLabel)).getValue
 
   def getObject(columnIndex: Int, map: util.Map[String, Class[_]]): AnyRef =
     throw new UnsupportedOperationException("getObject is not supported")
