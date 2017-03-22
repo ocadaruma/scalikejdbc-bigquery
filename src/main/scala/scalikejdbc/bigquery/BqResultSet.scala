@@ -4,7 +4,6 @@ import java.io.{Reader, InputStream}
 import java.math.BigDecimal
 import java.net.URL
 import java.sql.{Array => SqlArray, _}
-import java.time.format.DateTimeFormatter
 import java.time.{LocalDate, LocalTime, Instant}
 import java.util
 import java.util.Calendar
@@ -30,13 +29,11 @@ class BqResultSet(underlying: QueryResult) extends ResultSet {
   }
 
   private[this] def sqlTimeFromStringValue(time: String): Time = {
-    val formatter = DateTimeFormatter.ofPattern("HH:mm:ss.SSSSSS")
-    Time.valueOf(LocalTime.parse(time, formatter))
+    Time.valueOf(LocalTime.parse(time, Format.time))
   }
 
   private[this] def sqlDateFromStringValue(date: String): Date = {
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    Date.valueOf(LocalDate.parse(date, formatter))
+    Date.valueOf(LocalDate.parse(date, Format.date))
   }
 
   def getType: Int =
