@@ -1,0 +1,5 @@
+{"id":1,"post_id":1,"name":"java"}
+{"id":2,"post_id":1,"name":"scala"}
+{"id":3,"post_id":3,"name":"ruby"}
+{"id":4,"post_id":3,"name":"python"}
+{"id":5,"post_id":3,"name":"perl"}

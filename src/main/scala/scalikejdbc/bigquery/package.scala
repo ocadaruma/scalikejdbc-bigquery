@@ -9,5 +9,5 @@ package object bigquery {
     }
   }
 
-  def bq(builder: SQLBuilder[_]): BqSQL = new BqSQL(builder.toSQLSyntax)
+  def bq(builder: SQLBuilder[_]): BqSQL = new BqSQL(builder.sql)
 }

@@ -1,0 +1,3 @@
+{"id":1,"body":"first post about jvm languages","posted_at":"2017-03-23 10:00:00.000000"}
+{"id":2,"body":"second post","posted_at":"2017-03-24 10:00:00.000000"}
+{"id":3,"body":"third post about lightweight languages","posted_at":"2017-03-25 10:00:00.000000"}

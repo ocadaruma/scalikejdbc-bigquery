@@ -1,0 +1,17 @@
+[
+  {
+    "mode": "required",
+    "type": "INT64",
+    "name": "id"
+  },
+  {
+    "mode": "required",
+    "type": "INT64",
+    "name": "post_id"
+  },
+  {
+    "mode": "required",
+    "type": "STRING",
+    "name": "name"
+  }
+]

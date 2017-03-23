@@ -4,16 +4,20 @@ version := "0.0.1-SNAPSHOT"
 
 scalaVersion := "2.11.8"
 
-val scalikejdbcVersion = "2.4.2"
+configs(IntegrationTest)
+
+inConfig(IntegrationTest)(Defaults.itSettings)
+
+val scalikejdbcVersion = "3.0.0-RC3"
 val googleCloudVersion = "0.9.3-beta"
 
 libraryDependencies ++= Seq(
   "org.scalikejdbc" %% "scalikejdbc" % scalikejdbcVersion % "provided",
-  "org.scalikejdbc" %% "scalikejdbc" % scalikejdbcVersion % "test",
+  "org.scalikejdbc" %% "scalikejdbc" % scalikejdbcVersion % "it,test",
 
   "com.google.cloud" % "google-cloud-bigquery" % googleCloudVersion % "provided",
-  "com.google.cloud" % "google-cloud-bigquery" % googleCloudVersion % "test",
+  "com.google.cloud" % "google-cloud-bigquery" % googleCloudVersion % "it,test",
 
-  "org.scalatest" %% "scalatest" % "3.0.1" % "test",
-  "org.scalamock" %% "scalamock-scalatest-support" % "3.5.0" % "test"
+  "org.scalatest" %% "scalatest" % "3.0.1" % "it,test",
+  "org.scalamock" %% "scalamock-scalatest-support" % "3.5.0" % "it,test"
 )
