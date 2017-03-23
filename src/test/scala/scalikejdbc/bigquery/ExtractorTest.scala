@@ -19,7 +19,8 @@ class ExtractorTest extends FunSpec with MockFactory {
 
       // stub executor
       val executorStub = stub[QueryExecutor]
-      (executorStub.execute _).when(statement).returns(new ResultSetTraversableMock(Seq(user1, user2, user3)))
+      val responseStub = WrappedQueryResponse(Seq(user1, user2, user3))
+      (executorStub.execute _).when(statement).returns(responseStub)
 
       assert(extractor.list.run(executorStub).result == Seq(1, 2, 3))
     }
@@ -31,7 +32,8 @@ class ExtractorTest extends FunSpec with MockFactory {
 
       // stub executor
       val executorStub = stub[QueryExecutor]
-      (executorStub.execute _).when(statement).returns(new ResultSetTraversableMock(Nil))
+      val responseStub = WrappedQueryResponse(Nil)
+      (executorStub.execute _).when(statement).returns(responseStub)
 
       assert(extractor.list.run(executorStub).result == Nil)
     }
@@ -48,7 +50,8 @@ class ExtractorTest extends FunSpec with MockFactory {
 
       // stub executor
       val executorStub = stub[QueryExecutor]
-      (executorStub.execute _).when(statement).returns(new ResultSetTraversableMock(Seq(user)))
+      val responseStub = WrappedQueryResponse(Seq(user))
+      (executorStub.execute _).when(statement).returns(responseStub)
 
       assert(extractor.single.run(executorStub).result == Some(1))
     }
@@ -60,7 +63,8 @@ class ExtractorTest extends FunSpec with MockFactory {
 
       // stub executor
       val executorStub = stub[QueryExecutor]
-      (executorStub.execute _).when(statement).returns(new ResultSetTraversableMock(Nil))
+      val responseStub = WrappedQueryResponse(Nil)
+      (executorStub.execute _).when(statement).returns(responseStub)
 
       assert(extractor.single.run(executorStub).result == None)
     }
