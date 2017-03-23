@@ -12,11 +12,9 @@ val scalikejdbcVersion = "3.0.0-RC3"
 val googleCloudVersion = "0.9.3-beta"
 
 libraryDependencies ++= Seq(
-  "org.scalikejdbc" %% "scalikejdbc" % scalikejdbcVersion % "provided",
-  "org.scalikejdbc" %% "scalikejdbc" % scalikejdbcVersion % "it,test",
+  "org.scalikejdbc" %% "scalikejdbc" % scalikejdbcVersion % "provided,it,test",
 
-  "com.google.cloud" % "google-cloud-bigquery" % googleCloudVersion % "provided",
-  "com.google.cloud" % "google-cloud-bigquery" % googleCloudVersion % "it,test",
+  "com.google.cloud" % "google-cloud-bigquery" % googleCloudVersion % "compile",
 
   "org.scalatest" %% "scalatest" % "3.0.1" % "it,test",
   "org.scalamock" %% "scalamock-scalatest-support" % "3.5.0" % "it,test"
