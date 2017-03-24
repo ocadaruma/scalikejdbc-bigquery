@@ -64,7 +64,8 @@ class QueryDSLIntegration extends FlatSpec with BigQueryFixture {
       .list
       .run(executor)
 
-    val result = response.result
+    // handle environment-dependent TimeZone difference
+    val result = response.result.map(p => p.copy(post = p.post.copy(postedAt = p.post.postedAt.withZoneSameInstant(ZoneId.of("UTC")))))
 
     assert(result.size == 3)
 

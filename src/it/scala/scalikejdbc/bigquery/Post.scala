@@ -1,6 +1,6 @@
 package scalikejdbc.bigquery
 
-import java.time.{ZoneId, Instant, ZonedDateTime}
+import java.time.ZonedDateTime
 
 import scalikejdbc._
 
@@ -21,8 +21,6 @@ object Post extends SQLSyntaxSupport[Post] {
   override val columns = Seq("id", "body", "posted_at")
 
   implicit val postIdBinders: Binders[PostId] = Binders.int.xmap(PostId.apply, _.value)
-  implicit val zonedDateTimeTypeBinder: TypeBinder[ZonedDateTime] =
-    TypeBinder.jodaDateTime.map(t => ZonedDateTime.ofInstant(Instant.ofEpochMilli(t.getMillis), ZoneId.of("UTC")))
 
   val p = this.syntax("p")
 
