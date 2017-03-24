@@ -48,13 +48,13 @@ class QueryDSLIntegration extends FlatSpec with BigQueryFixture {
 
     val response = bq {
       select(sub.result.*, t.result.*).from(
-        select(p.result.*).from(standardTableReference(dataset, Post.tableName, Some(p.tableAliasName)))
+        select(p.result.*).from(Post in dataset as p)
           .where.in(p.id, Seq(PostId(1), PostId(2), PostId(3)))
           .limit(3)
           .offset(0)
           .as(sub)
       )
-        .leftJoin(standardTableReference(dataset, Tag.tableName, Some(t.tableAliasName)))
+        .leftJoin(Tag in dataset as t)
         .on(sub(p).id, t.postId)
         .orderBy(sub(p).id, t.id)
     }

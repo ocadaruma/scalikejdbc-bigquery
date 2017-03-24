@@ -4,17 +4,23 @@ import com.google.cloud.bigquery.DatasetId
 
 object BqExtension {
 
-  def standardTableReference(
-    datasetId: DatasetId,
-    tableName: String,
-    tableAliasName: Option[String] = None): TableAsAliasSQLSyntax = {
+  implicit class BqSQLSyntaxSupport[A](self: SQLSyntaxSupport[A]) {
 
-    val tableReference = s"`${datasetId.getProject}.${datasetId.getDataset}.${tableName}`"
+    class StandardTableAsAliasSQLSyntaxBuilder(datasetId: DatasetId) {
+      def as(provider: SyntaxProvider[A]): TableAsAliasSQLSyntax = {
+        val qualifiedTableName = s"`${datasetId.getProject}.${datasetId.getDataset}.${self.tableName}`"
 
-    val withAlias = tableAliasName.fold(tableReference) { alias =>
-      s"${tableReference} ${alias}"
+        // same implementation as SQLSyntaxSupport#as
+        if (self.tableName == provider.tableAliasName) {
+          TableAsAliasSQLSyntax(qualifiedTableName, self.table.rawParameters, Some(provider))
+        } else {
+          TableAsAliasSQLSyntax(qualifiedTableName + " " + provider.tableAliasName, Nil, Some(provider))
+        }
+      }
     }
 
-    TableAsAliasSQLSyntax(withAlias)
+    def in(datasetId: DatasetId): StandardTableAsAliasSQLSyntaxBuilder = {
+      new StandardTableAsAliasSQLSyntaxBuilder(datasetId)
+    }
   }
 }
