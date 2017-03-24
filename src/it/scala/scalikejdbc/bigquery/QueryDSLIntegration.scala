@@ -4,7 +4,7 @@ import java.time.{ZonedDateTime, ZoneId}
 
 import com.google.cloud.bigquery.DatasetId
 import org.scalatest.FlatSpec
-import scalikejdbc._, BqExtension._
+import scalikejdbc._
 
 class QueryDSLIntegration extends FlatSpec with BigQueryFixture {
 

@@ -24,7 +24,7 @@ libraryDependencies ++= Seq(
 ```scala
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.bigquery.{BigQueryOptions, DatasetId}
-import scalikejdbc._, bigquery._, BqExtension._
+import scalikejdbc._, bigquery._
 
 // instantiate BigQuery service and DatsetId
 val credentials = GoogleCredentials.fromStream(new FileInputStream("/path/to/key.json"))

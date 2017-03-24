@@ -3,7 +3,7 @@ package scalikejdbc.bigquery
 /**
  * Represents a parameter to be bound to SQL statement.
  */
-abstract class BqParameter
+sealed abstract class BqParameter
 
 object BqParameter {
 
