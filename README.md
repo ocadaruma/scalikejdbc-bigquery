@@ -34,7 +34,7 @@ val bigQuery = BigQueryOptions.newBuilder()
   .build()
   .getService
   
-val datasetId = DatasetId.of("your-gcp-project-id", "your-dataset")
+val dataset = DatasetId.of("your-gcp-project-id", "your-dataset")
 
 // build query by QueryDSL then execute
 val executor = new QueryExecutor(bigQuery, QueryConfig())
