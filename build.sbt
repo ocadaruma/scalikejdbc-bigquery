@@ -1,8 +1,16 @@
 name := "scalikejdbc-bigquery"
 
+organization := "com.mayreh"
+
+licenses += (("Apache-2.0", url("https://raw.githubusercontent.com/ocadaruma/scalikejdbc-bigquery/master/LICENSE")))
+
 version := "0.0.1-SNAPSHOT"
 
+publishMavenStyle := true
+
 scalaVersion := "2.11.8"
+
+scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature")
 
 configs(IntegrationTest)
 
