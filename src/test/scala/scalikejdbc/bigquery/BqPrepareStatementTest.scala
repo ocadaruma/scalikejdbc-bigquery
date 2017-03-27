@@ -34,9 +34,11 @@ class BqPrepareStatementTest extends FlatSpec {
 
     val statement = new BqPreparedStatement
 
-    val time = ZonedDateTime.of(2017, 3, 21, 10, 0, 0, 0, ZoneId.of("Asia/Tokyo"))
-    statement.setTimestamp(1, Timestamp.from(time.toInstant), Calendar.getInstance(TimeZone.getTimeZone(time.getZone)))
+    val time = ZonedDateTime.of(2017, 3, 21, 10, 0, 0, 0, ZoneId.systemDefault())
+    statement.setTimestamp(1, Timestamp.from(time.toInstant))
+    statement.setTimestamp(2, Timestamp.from(time.toInstant), Calendar.getInstance())
 
     assert(statement.parameters(1) == BqParameter.Timestamp(time))
+    assert(statement.parameters(2) == BqParameter.Timestamp(time))
   }
 }

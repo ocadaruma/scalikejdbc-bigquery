@@ -4,6 +4,7 @@ import java.io.{InputStream, Reader}
 import java.math.BigDecimal
 import java.net.URL
 import java.sql.{Array => SqlArray, _}
+import java.time.ZoneId
 import java.util.Calendar
 
 import scala.collection.concurrent.TrieMap
@@ -68,7 +69,7 @@ class BqPreparedStatement extends PreparedStatement {
     parameterBuffer(parameterIndex) = BqParameter.Date(x.toLocalDate)
 
   def setTimestamp(parameterIndex: Int, x: Timestamp): Unit =
-    parameterBuffer(parameterIndex) = BqParameter.DateTime(x.toLocalDateTime)
+    parameterBuffer(parameterIndex) = BqParameter.Timestamp(x.toInstant.atZone(ZoneId.systemDefault()))
 
   def setTimestamp(parameterIndex: Int, x: Timestamp, cal: Calendar): Unit =
     parameterBuffer(parameterIndex) = BqParameter.Timestamp(x.toInstant.atZone(cal.getTimeZone.toZoneId))
