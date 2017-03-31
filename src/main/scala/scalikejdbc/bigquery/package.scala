@@ -11,23 +11,22 @@ package object bigquery {
 //    }
 //  }
 
-  implicit class BqSQLSyntaxSupport[A](self: SQLSyntaxSupport[A]) {
-
-    class StandardTableAsAliasSQLSyntaxBuilder(datasetId: DatasetId) {
-      def as(provider: SyntaxProvider[A]): TableAsAliasSQLSyntax = {
-        val qualifiedTableName = s"`${datasetId.getProject}.${datasetId.getDataset}.${self.tableName}`"
-
-        // same implementation as SQLSyntaxSupport#as
-        if (self.tableName == provider.tableAliasName) {
-          TableAsAliasSQLSyntax(qualifiedTableName, self.table.rawParameters, Some(provider))
-        } else {
-          TableAsAliasSQLSyntax(qualifiedTableName + " " + provider.tableAliasName, Nil, Some(provider))
-        }
-      }
+  implicit class BqSQLSyntaxSupport[A](private val self: SQLSyntaxSupport[A]) extends AnyVal {
+    def in(datasetId: DatasetId): StandardTableAsAliasSQLSyntaxBuilder[A] = {
+      new StandardTableAsAliasSQLSyntaxBuilder[A](datasetId, self)
     }
+  }
 
-    def in(datasetId: DatasetId): StandardTableAsAliasSQLSyntaxBuilder = {
-      new StandardTableAsAliasSQLSyntaxBuilder(datasetId)
+  class StandardTableAsAliasSQLSyntaxBuilder[A](datasetId: DatasetId, self: SQLSyntaxSupport[A]) {
+    def as(provider: SyntaxProvider[A]): TableAsAliasSQLSyntax = {
+      val qualifiedTableName = s"`${datasetId.getProject}.${datasetId.getDataset}.${self.tableName}`"
+
+      // same implementation as SQLSyntaxSupport#as
+      if (self.tableName == provider.tableAliasName) {
+        TableAsAliasSQLSyntax(qualifiedTableName, self.table.rawParameters, Some(provider))
+      } else {
+        TableAsAliasSQLSyntax(qualifiedTableName + " " + provider.tableAliasName, Nil, Some(provider))
+      }
     }
   }
 
