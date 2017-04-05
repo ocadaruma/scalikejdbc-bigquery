@@ -6,7 +6,7 @@ class Extractor[A](statement: SQLSyntax, f: WrappedResultSet => A) {
 
   def list: Runner[Seq[A]] = Runner(statement)(_.map(f)(collection.breakOut))
 
-  def single: Runner[Option[A]] = Runner(statement)(_.headOption.map(f))
+  def single: Runner[Option[A]] = Runner(statement)(_.map(f).headOption)
 }
 
 trait ExtractorBuilder {
