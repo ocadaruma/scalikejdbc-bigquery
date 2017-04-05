@@ -91,4 +91,27 @@ class QueryDSLIntegration extends FlatSpec with BigQueryFixture {
       )
     ))
   }
+
+  it should "work correctly on standard SQL single result" in {
+    val bigQuery = mkBigQuery()
+    val queryConfig = QueryConfig()
+
+    val dataset = DatasetId.of(projectId(), "scalikejdbc_bigquery_integration")
+
+    val executor = new QueryExecutor(bigQuery, queryConfig)
+
+    import Post.p, Post.postIdBinders
+
+    val response = bq {
+      select(sqls.count).from(Post in dataset as p)
+        .where.in(p.id, Seq(PostId(1), PostId(2)))
+    }
+      .map(_.long(0))
+      .single
+      .run(executor)
+
+    val result = response.result.get
+
+    assert(result == 2)
+  }
 }
