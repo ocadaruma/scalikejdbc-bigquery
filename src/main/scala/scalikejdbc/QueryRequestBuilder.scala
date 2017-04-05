@@ -15,13 +15,41 @@ object QueryRequestBuilder {
     val builder = QueryRequest.newBuilder(statement.value)
     val ps = new BqPreparedStatement
 
+    // almost same implementation as scalikejdbc.StatementExecutor
     statement.rawParameters.zipWithIndex.foreach { case (param, index) =>
       param match {
         case binder: ParameterBinder =>
           binder(ps, index)
+        case p: BigDecimal => ps.setBigDecimal(index, p.bigDecimal)
+        case p: BigInt => ps.setBigDecimal(index, new java.math.BigDecimal(p.bigInteger))
+        case p: Boolean => ps.setBoolean(index, p)
+        case p: Byte => ps.setByte(index, p)
+        case p: java.sql.Date => ps.setDate(index, p)
+        case p: Double => ps.setDouble(index, p)
+        case p: Float => ps.setFloat(index, p)
+        case p: Int => ps.setInt(index, p)
+        case p: Long => ps.setLong(index, p)
+        case p: Short => ps.setShort(index, p)
+        case p: String => ps.setString(index, p)
+        case p: java.sql.Time => ps.setTime(index, p)
+        case p: java.sql.Timestamp => ps.setTimestamp(index, p)
+        case p: java.util.Date => ps.setTimestamp(index, p.toSqlTimestamp)
+        case p: org.joda.time.DateTime => ps.setTimestamp(index, p.toDate.toSqlTimestamp)
+        case p: org.joda.time.LocalDateTime => ps.setTimestamp(index, p.toDate.toSqlTimestamp)
+        case p: org.joda.time.LocalDate => ps.setDate(index, p.toDate.toSqlDate)
+        case p: org.joda.time.LocalTime => ps.setTime(index, p.toSqlTime)
+        case p: java.time.ZonedDateTime => ps.setTimestamp(index, java.sql.Timestamp.from(p.toInstant))
+        case p: java.time.OffsetDateTime => ps.setTimestamp(index, java.sql.Timestamp.from(p.toInstant))
+        case p: java.time.Instant => ps.setTimestamp(index, java.sql.Timestamp.from(p))
+        case p: java.time.LocalDateTime =>
+          ps.setTimestamp(index, org.joda.time.LocalDateTime.parse(p.toString).toDate.toSqlTimestamp)
+        case p: java.time.LocalDate =>
+          ps.setDate(index, org.joda.time.LocalDate.parse(p.toString).toDate.toSqlDate)
+        case p: java.time.LocalTime =>
+          ps.setTime(index, org.joda.time.LocalTime.parse(p.toString).toSqlTime)
         case _ =>
           throw new UnsupportedOperationException(
-            s"directly embedded parameters are not supported. use scalikejdbc.ParameterBinderFactory. index: ${index}, parameter : ${param}")
+            s"unsupported parameter type. index: ${index}, parameter : ${param}, class: ${param.getClass}")
       }
     }
 
