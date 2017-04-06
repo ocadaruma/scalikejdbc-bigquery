@@ -1,5 +1,7 @@
 package scalikejdbc
 
+import java.time.ZoneId
+
 import com.google.cloud.bigquery.{QueryParameterValue, QueryRequest}
 import scalikejdbc.bigquery.{Format, BqParameter, BqPreparedStatement}
 
@@ -74,7 +76,7 @@ object QueryRequestBuilder {
           case BqParameter.Time(value) =>
             QueryParameterValue.time(value.format(Format.time))
           case BqParameter.Timestamp(value) =>
-            QueryParameterValue.timestamp(value.format(Format.timestamp))
+            QueryParameterValue.timestamp(value.withZoneSameInstant(ZoneId.of("UTC")).format(Format.timestamp))
         }
       }.asJava
 

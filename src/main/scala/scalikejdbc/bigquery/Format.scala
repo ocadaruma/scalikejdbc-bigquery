@@ -12,5 +12,5 @@ object Format {
 
   val time = DateTimeFormatter.ofPattern("HH:mm:ss.SSSSSS")
 
-  val timestamp = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSZZ")
+  val timestamp = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSxxxxx")
 }

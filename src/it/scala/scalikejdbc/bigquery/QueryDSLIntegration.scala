@@ -114,4 +114,27 @@ class QueryDSLIntegration extends FlatSpec with BigQueryFixture {
 
     assert(result == 2)
   }
+
+  it should "correctly bind timeZone parameter" in {
+    val bigQuery = mkBigQuery()
+    val queryConfig = QueryConfig()
+
+    val dataset = DatasetId.of(projectId(), "scalikejdbc_bigquery_integration")
+
+    val executor = new QueryExecutor(bigQuery, queryConfig)
+
+    import Post.p
+
+    val response = bq {
+      select(p.result.id).from(Post in dataset as p)
+        .where.eq(p.postedAt, ZonedDateTime.of(2017, 3, 23, 10, 0, 0, 0, ZoneId.of("UTC")))
+    }
+      .map(_.long(p.resultName.id))
+      .single
+      .run(executor)
+
+    val result = response.result.get
+
+    assert(result == 1L)
+  }
 }
