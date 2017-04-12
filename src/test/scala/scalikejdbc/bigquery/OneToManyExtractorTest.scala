@@ -22,7 +22,7 @@ class OneToManyExtractorTest extends FunSpec with MockFactory {
 
       // stub executor
       val executorStub = stub[QueryExecutor]
-      val responseStub = WrappedQueryResponse(Seq(post1_tag1, post1_tag2, post1_tag3, post2_tag1, post2_tag2, post3))
+      val responseStub = new WrappedQueryResponse(null, Seq(post1_tag1, post1_tag2, post1_tag3, post2_tag1, post2_tag2, post3))
       (executorStub.execute _).when(statement).returns(responseStub)
 
       assert(extractor.list.run(executorStub).result == Seq((1, Seq(101, 102, 103)), (2, Seq(201, 202)), (3, Nil)))
@@ -35,7 +35,7 @@ class OneToManyExtractorTest extends FunSpec with MockFactory {
 
       // stub executor
       val executorStub = stub[QueryExecutor]
-      val responseStub = WrappedQueryResponse(Nil)
+      val responseStub = new WrappedQueryResponse(null, Nil)
       (executorStub.execute _).when(statement).returns(responseStub)
 
       assert(extractor.list.run(executorStub).result == Nil)
@@ -55,7 +55,7 @@ class OneToManyExtractorTest extends FunSpec with MockFactory {
 
       // stub executor
       val executorStub = stub[QueryExecutor]
-      val responseStub = WrappedQueryResponse(Seq(post1_tag1, post1_tag2, post1_tag3))
+      val responseStub = new WrappedQueryResponse(null, Seq(post1_tag1, post1_tag2, post1_tag3))
       (executorStub.execute _).when(statement).returns(responseStub)
 
       assert(extractor.single.run(executorStub).result == Some((1, Seq(101, 102, 103))))
@@ -68,7 +68,7 @@ class OneToManyExtractorTest extends FunSpec with MockFactory {
 
       // stub executor
       val executorStub = stub[QueryExecutor]
-      val responseStub = WrappedQueryResponse(Nil)
+      val responseStub = new WrappedQueryResponse(null, Nil)
       (executorStub.execute _).when(statement).returns(responseStub)
 
       assert(extractor.single.run(executorStub).result == None)

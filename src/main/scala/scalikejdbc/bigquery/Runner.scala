@@ -15,8 +15,9 @@ trait Runner[A] {
   def statement: SQLSyntax
 
   def run(queryExecutor: QueryExecutor): Response[A] = {
-    val result = mapResultSet(queryExecutor.execute(statement).rsTraversable)
-    Response(result)
+    val response = queryExecutor.execute(statement)
+    val result = mapResultSet(response.rsTraversable)
+    Response(result, response.underlying)
   }
 }
 
