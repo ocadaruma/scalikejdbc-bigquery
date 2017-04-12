@@ -1,12 +1,13 @@
 package scalikejdbc.bigquery
 
-import com.google.cloud.bigquery.BigQuery
+import com.google.cloud.bigquery.{QueryResponse, BigQuery}
 import scalikejdbc._
 
 import scala.concurrent.duration._
 
-case class WrappedQueryResponse(
-  rsTraversable: Traversable[WrappedResultSet])
+class WrappedQueryResponse(
+  private[bigquery] val underlying: QueryResponse,
+  private[bigquery] val rsTraversable: Traversable[WrappedResultSet])
 
 class QueryExecutor(bigQuery: BigQuery, config: QueryConfig) {
 
@@ -23,6 +24,6 @@ class QueryExecutor(bigQuery: BigQuery, config: QueryConfig) {
 
     val rs = new BqResultSet(response.getResult)
 
-    WrappedQueryResponse(new ResultSetTraversable(rs))
+    new WrappedQueryResponse(response, new ResultSetTraversable(rs))
   }
 }
