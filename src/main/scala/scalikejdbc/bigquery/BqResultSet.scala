@@ -14,7 +14,7 @@ import scala.collection.JavaConverters._
 
 class BqResultSet(underlying: QueryResult) extends ResultSet {
 
-  private[this] val resultIterator: Iterator[Seq[FieldValue]] = underlying.iterateAll().asScala.map(_.asScala)
+  private[this] val resultIterator: Iterator[Seq[FieldValue]] = underlying.iterateAll().asScala.map(_.asScala).iterator
   private[this] val columnNameIndexMap: Map[String, Int] = underlying.getSchema.getFields.asScala.zipWithIndex
     .map { case (field, index) => (field.getName, index) }.toMap
 
