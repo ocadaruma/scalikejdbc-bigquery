@@ -16,13 +16,13 @@ configs(IntegrationTest)
 
 inConfig(IntegrationTest)(Defaults.itSettings)
 
-val scalikejdbcVersion = "3.0.0-RC3"
-val googleCloudVersion = "0.17.2-beta"
+val scalikejdbcVersion = "3.0.0"
+val googleCloudVersion = "0.13.0-beta"
 
 libraryDependencies ++= Seq(
   "org.scalikejdbc" %% "scalikejdbc" % scalikejdbcVersion % "provided,it,test",
 
-  "com.google.cloud" % "google-cloud-bigquery" % googleCloudVersion % "compile",
+  "com.google.cloud" % "google-cloud-bigquery" % googleCloudVersion % "provided,it,test",
 
   "org.scalatest" %% "scalatest" % "3.0.1" % "it,test",
   "org.scalamock" %% "scalamock-scalatest-support" % "3.5.0" % "it,test"
