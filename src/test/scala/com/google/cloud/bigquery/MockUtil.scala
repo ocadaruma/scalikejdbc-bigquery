@@ -37,14 +37,14 @@ object MockUtil {
       // TODO: case Struct() =>
     }
 
-    new FieldValue(attribute, underlying)
+    FieldValue.of(attribute, underlying)
   }
 
   def queryResultFromSeq(source: Seq[Seq[FieldValue]], schema: Schema): QueryResult = {
     val builder = QueryResult.newBuilder()
 
     builder.setSchema(schema)
-    builder.setResults(source.map(_.asJava).asJava)
+    builder.setResults(source.map(seq => FieldValueList.of(seq.asJava, schema.getFields)).asJava)
 
     builder.build()
   }

@@ -2,8 +2,8 @@ package scalikejdbc
 
 import java.time.ZoneId
 
-import com.google.cloud.bigquery.{QueryParameterValue, QueryRequest}
-import scalikejdbc.bigquery.{Format, BqParameter, BqPreparedStatement}
+import com.google.cloud.bigquery.{QueryJobConfiguration, QueryParameterValue}
+import scalikejdbc.bigquery.{BqParameter, BqPreparedStatement, Format}
 
 import scala.collection.JavaConverters._
 
@@ -12,9 +12,9 @@ object QueryRequestBuilder {
   /**
    * Instantiate QueryRequestBuilder that SQL statement and parameters are set.
    */
-  def apply(statement: SQLSyntax): QueryRequest.Builder = {
+  def apply(statement: SQLSyntax): QueryJobConfiguration.Builder = {
 
-    val builder = QueryRequest.newBuilder(statement.value)
+    val builder = QueryJobConfiguration.newBuilder(statement.value)
     val ps = new BqPreparedStatement
 
     // almost same implementation as scalikejdbc.StatementExecutor
