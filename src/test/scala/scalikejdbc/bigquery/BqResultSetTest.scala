@@ -1,8 +1,8 @@
 package scalikejdbc.bigquery
 
-import java.time.{ZoneId, ZonedDateTime, LocalTime, LocalDate}
+import java.time.{LocalDate, LocalTime, ZoneId, ZonedDateTime}
 
-import com.google.cloud.bigquery.{Field, Schema, MockUtil}
+import com.google.cloud.bigquery.{Field, LegacySQLTypeName, MockUtil, Schema}
 import org.scalatest.FlatSpec
 
 class BqResultSetTest extends FlatSpec {
@@ -13,7 +13,7 @@ class BqResultSetTest extends FlatSpec {
     val row2 = Seq(BqParameter.String("second")).map(MockUtil.fieldValueFromParameter(_))
     val row3 = Seq(BqParameter.String("third")).map(MockUtil.fieldValueFromParameter(_))
 
-    val schema = Schema.newBuilder().addField(Field.of("name", Field.Type.string())).build()
+    val schema = Schema.of(Field.of("name", LegacySQLTypeName.STRING));
     val queryResult = MockUtil.queryResultFromSeq(Seq(row1, row2, row3), schema)
 
     val resultSet = new BqResultSet(queryResult)
@@ -38,16 +38,18 @@ class BqResultSetTest extends FlatSpec {
       BqParameter.Timestamp(ZonedDateTime.of(2017, 3, 22, 19, 58, 0, 0, ZoneId.of("Asia/Tokyo")))
     ).map(MockUtil.fieldValueFromParameter(_))
 
-    val schema = Schema.newBuilder().setFields(
-      Field.of("int64_column", Field.Type.integer()),
-      Field.of("float64_column", Field.Type.floatingPoint()),
-      Field.of("bool_column", Field.Type.bool()),
-      Field.of("string_column", Field.Type.string()),
-      Field.of("bytes_column", Field.Type.bytes()),
-      Field.of("date_column", Field.Type.string()),
-      Field.of("time_column", Field.Type.string()),
-      Field.of("timestamp_column", Field.Type.timestamp())
-    ).build()
+    val fields = Seq(
+      Field.of("int64_column", LegacySQLTypeName.INTEGER),
+      Field.of("float64_column", LegacySQLTypeName.FLOAT),
+      Field.of("bool_column", LegacySQLTypeName.BOOLEAN),
+      Field.of("string_column", LegacySQLTypeName.STRING),
+      Field.of("bytes_column", LegacySQLTypeName.BYTES),
+      Field.of("date_column", LegacySQLTypeName.STRING),
+      Field.of("time_column", LegacySQLTypeName.STRING),
+      Field.of("timestamp_column", LegacySQLTypeName.TIMESTAMP)
+    )
+
+    val schema = Schema.of(fields: _*)
 
     val queryResult = MockUtil.queryResultFromSeq(Seq(row), schema)
 
