@@ -5,6 +5,7 @@ env:
 
 scala:
   - 2.11.8
+  - 2.12.6
 
 jdk:
   - oraclejdk8
