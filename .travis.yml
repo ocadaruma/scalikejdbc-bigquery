@@ -14,5 +14,5 @@ before_script:
   - echo ${GCLOUD_SERVICE_KEY} | base64 --decode > ${GCLOUD_SERVICE_KEY_LOCATION}
 
 script:
-  - sbt test
-  - sbt it:test
+  - sbt ++$TRAVIS_SCALA_VERSION test
+  - sbt ++$TRAVIS_SCALA_VERSION it:test
