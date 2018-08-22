@@ -7,7 +7,7 @@ ScalikeJDBC extension for Google BigQuery
 ## Prerequisites
 
 - Java 8
-- Scala 2.11.x
+- Scala 2.11.x / 2.12.x
 - ScalikeJDBC 2.4.x or newer
 
 ## Installation
