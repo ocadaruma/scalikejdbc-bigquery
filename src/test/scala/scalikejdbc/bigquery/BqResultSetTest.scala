@@ -14,7 +14,7 @@ class BqResultSetTest extends FlatSpec {
     val row3 = Seq(BqParameter.String("third")).map(MockUtil.fieldValueFromParameter(_))
 
     val schema = Schema.of(Field.of("name", LegacySQLTypeName.STRING));
-    val queryResult = MockUtil.queryResultFromSeq(Seq(row1, row2, row3), schema)
+    val queryResult = MockUtil.tableResultFromSeq(Seq(row1, row2, row3), schema)
 
     val resultSet = new BqResultSet(queryResult)
 
@@ -51,7 +51,7 @@ class BqResultSetTest extends FlatSpec {
 
     val schema = Schema.of(fields: _*)
 
-    val queryResult = MockUtil.queryResultFromSeq(Seq(row), schema)
+    val queryResult = MockUtil.tableResultFromSeq(Seq(row), schema)
 
     val resultSet = new BqResultSet(queryResult)
 

@@ -2,8 +2,11 @@ package com.google.cloud.bigquery
 
 import java.util.Base64
 
+import com.google.api.gax.paging.Page
+import com.google.cloud.PageImpl
+import com.google.cloud.PageImpl.NextPageFetcher
 import com.google.cloud.bigquery.FieldValue.Attribute
-import scalikejdbc.bigquery.{Format, BqParameter}
+import scalikejdbc.bigquery.{BqParameter, Format}
 
 import scala.collection.JavaConverters._
 
@@ -40,12 +43,14 @@ object MockUtil {
     FieldValue.of(attribute, underlying)
   }
 
-  def queryResultFromSeq(source: Seq[Seq[FieldValue]], schema: Schema): QueryResult = {
-    val builder = QueryResult.newBuilder()
+  def tableResultFromSeq(source: Seq[Seq[FieldValue]], schema: Schema): TableResult = {
+    val page = new PageImpl(
+      new NextPageFetcher[FieldValueList] {
+        override def getNextPage: Page[FieldValueList] = null
+      },
+      "cursor",
+      source.map(seq => FieldValueList.of(seq.asJava)).asJava)
 
-    builder.setSchema(schema)
-    builder.setResults(source.map(seq => FieldValueList.of(seq.asJava, schema.getFields)).asJava)
-
-    builder.build()
+    new TableResult(schema, source.size, page)
   }
 }

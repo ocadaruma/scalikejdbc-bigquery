@@ -8,33 +8,35 @@ import scalikejdbc._
 
 class QueryDSLIntegration extends FlatSpec with BigQueryFixture {
 
-  //========================
-  // Suppose that tables and rows like following exist in DataSet:"scalikejdbc_bigquery_integration".
-  //
-  //     create table post (
-  //       id INT64,
-  //       body STRING,
-  //       posted_at TIMESTAMP,
-  //     );
-  //
-  //     create table tag (
-  //       id INT64,
-  //       post_id INT64,
-  //       name STRING
-  //     );
-  //
-  //     insert into post(id, body, posted_at) values (1, 'first post about jvm languages', '2017-03-23T10:00:00.000000+0000')
-  //     insert into tag(id, post_id, name) values (1, 1, 'java');
-  //     insert into tag(id, post_id, name) values (2, 1, 'scala');
-  //
-  //     insert into post(id, body, posted_at) values (2, 'second post', '2017-03-24T10:00:00.000000+0000')
-  //
-  //     insert into post(id, body, posted_at) values (3, 'third post about lightweight languages', '2017-03-25T10:00:00.000000+0000')
-  //     insert into tag(id, post_id, name) values (3, 3, 'ruby');
-  //     insert into tag(id, post_id, name) values (4, 3, 'python');
-  //     insert into tag(id, post_id, name) values (5, 3, 'perl');
-  //
-  //========================
+  /* ========================
+  Suppose that tables and rows like following exist in DataSet:"scalikejdbc_bigquery_integration".
+
+  create table scalikejdbc_bigquery_integration.post (
+    id INT64,
+    body STRING,
+    posted_at TIMESTAMP
+  );
+
+  create table scalikejdbc_bigquery_integration.tag (
+    id INT64,
+    post_id INT64,
+    name STRING
+  );
+
+  insert into scalikejdbc_bigquery_integration.post (id, body, posted_at) values
+    (1, 'first post about jvm languages', '2017-03-23T10:00:00.000000'),
+    (2, 'second post', '2017-03-24T10:00:00.000000'),
+    (3, 'third post about lightweight languages', '2017-03-25T10:00:00.000000');
+
+  insert into scalikejdbc_bigquery_integration.tag(id, post_id, name) values
+    (1, 1, 'java'),
+    (2, 1, 'scala'),
+    (3, 3, 'ruby'),
+    (4, 3, 'python'),
+    (5, 3, 'perl');
+
+  ======================== */
+
   it should "work correctly on standard SQL" in {
     val bigQuery = mkBigQuery()
     val queryConfig = QueryConfig()
