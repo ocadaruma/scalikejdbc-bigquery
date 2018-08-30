@@ -1,32 +1,23 @@
 package scalikejdbc.bigquery
 
-import com.google.cloud.bigquery.BigQuery.{QueryOption, QueryResultsOption}
-import com.google.cloud.bigquery.{BigQuery, QueryResponse}
+import com.google.cloud.bigquery.{BigQuery, TableResult}
 import scalikejdbc._
 
-import scala.concurrent.duration._
-
 class WrappedQueryResponse(
-  private[bigquery] val underlying: QueryResponse,
+  private[bigquery] val underlying: TableResult,
   private[bigquery] val rsTraversable: Traversable[WrappedResultSet])
 
 class QueryExecutor(bigQuery: BigQuery, config: QueryConfig) {
 
   def execute(statement: SQLSyntax): WrappedQueryResponse = {
 
-    val builder = QueryRequestBuilder(statement)
+    val request = QueryRequestBuilder(statement)
       .setUseLegacySql(config.useLegacySql)
       .setUseQueryCache(config.useQueryCache)
+      .build()
 
-    val queryOptions = Seq(
-      QueryOption.of(QueryResultsOption.maxWaitTime(30.minutes.toMillis)) // TODO: make configurable
-    )
-
-    val request = builder.build()
-
-    val response = bigQuery.query(request, queryOptions: _*)
-
-    val rs = new BqResultSet(response.getResult)
+    val response = bigQuery.query(request)
+    val rs = new BqResultSet(response)
 
     new WrappedQueryResponse(response, new ResultSetTraversable(rs))
   }

@@ -1,18 +1,18 @@
 package scalikejdbc.bigquery
 
-import java.io.{Reader, InputStream}
+import java.io.{InputStream, Reader}
 import java.math.BigDecimal
 import java.net.URL
 import java.sql.{Array => SqlArray, _}
-import java.time.{LocalDate, LocalTime, Instant}
+import java.time.{Instant, LocalDate, LocalTime}
 import java.util
 import java.util.Calendar
 
-import com.google.cloud.bigquery.{FieldValue, QueryResult}
+import com.google.cloud.bigquery.{FieldValue, TableResult}
 
 import scala.collection.JavaConverters._
 
-class BqResultSet(underlying: QueryResult) extends ResultSet {
+class BqResultSet(underlying: TableResult) extends ResultSet {
 
   private[this] val resultIterator: Iterator[Seq[FieldValue]] = underlying.iterateAll().asScala.map(_.asScala).iterator
   private[this] val columnNameIndexMap: Map[String, Int] = underlying.getSchema.getFields.asScala.zipWithIndex
