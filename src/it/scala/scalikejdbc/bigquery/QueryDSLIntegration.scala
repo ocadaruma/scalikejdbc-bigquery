@@ -139,4 +139,26 @@ class QueryDSLIntegration extends FlatSpec with BigQueryFixture {
 
     assert(result == 1L)
   }
+
+  it should "return empty result" in {
+    val bigQuery = mkBigQuery()
+    val queryConfig = QueryConfig()
+
+    val dataset = DatasetId.of(projectId(), "scalikejdbc_bigquery_integration")
+
+    val executor = new QueryExecutor(bigQuery, queryConfig)
+
+    import Post.p
+
+    val response = bq {
+      select(p.result.id).from(Post in dataset as p)
+        .where.isNull(p.id)
+    }
+      .map(_.long(p.resultName.id))
+      .single
+      .run(executor)
+
+    assert(response.result == None)
+  }
+
 }

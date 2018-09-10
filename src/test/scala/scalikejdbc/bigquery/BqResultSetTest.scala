@@ -2,10 +2,16 @@ package scalikejdbc.bigquery
 
 import java.time.{LocalDate, LocalTime, ZoneId, ZonedDateTime}
 
-import com.google.cloud.bigquery.{Field, LegacySQLTypeName, MockUtil, Schema}
+import com.google.cloud.PageImpl
+import com.google.cloud.bigquery._
 import org.scalatest.FlatSpec
 
 class BqResultSetTest extends FlatSpec {
+
+  it should "be able to instantiate from null Schema" in {
+    val tableResult = MockUtil.tableResultFromSeq(Nil, null)
+    new BqResultSet(tableResult)
+  }
 
   it should "correctly traversable" in {
 
