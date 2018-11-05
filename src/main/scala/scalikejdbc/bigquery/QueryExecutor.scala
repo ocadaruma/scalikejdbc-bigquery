@@ -1,6 +1,7 @@
 package scalikejdbc.bigquery
 
-import com.google.cloud.bigquery.{BigQuery, TableResult}
+import com.google.cloud.bigquery.BigQuery.QueryResultsOption
+import com.google.cloud.bigquery.{BigQuery, JobInfo, TableResult}
 import scalikejdbc._
 
 class WrappedQueryResponse(
@@ -16,7 +17,12 @@ class QueryExecutor(bigQuery: BigQuery, config: QueryConfig) {
       .setUseQueryCache(config.useQueryCache)
       .build()
 
-    val response = bigQuery.query(request)
+    val queryResultsOptions = Seq(
+      config.pageSize.map(QueryResultsOption.pageSize)
+    ).flatten
+
+    val job = bigQuery.create(JobInfo.of(request))
+    val response = job.getQueryResults(queryResultsOptions: _*)
     val rs = new BqResultSet(response)
 
     new WrappedQueryResponse(response, new ResultSetTraversable(rs))
