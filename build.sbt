@@ -21,7 +21,7 @@ configs(IntegrationTest)
 inConfig(IntegrationTest)(Defaults.itSettings)
 
 val scalikejdbcVersion = "3.0.0"
-val googleCloudVersion = "1.41.0"
+val googleCloudVersion = "1.51.0"
 
 libraryDependencies ++= Seq(
   "org.scalikejdbc" %% "scalikejdbc" % scalikejdbcVersion % "provided,it,test",
