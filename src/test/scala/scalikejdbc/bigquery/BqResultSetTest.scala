@@ -2,7 +2,6 @@ package scalikejdbc.bigquery
 
 import java.time.{LocalDate, LocalTime, ZoneId, ZonedDateTime}
 
-import com.google.cloud.PageImpl
 import com.google.cloud.bigquery._
 import org.scalatest.FlatSpec
 

@@ -7,7 +7,7 @@ trait Runner[A] {
   /**
    * Transform ResultSet to desired type.
    */
-  protected def mapResultSet(rsTraversable: Traversable[WrappedResultSet]): A
+  protected def mapResultSet(rsIterator: Iterator[WrappedResultSet]): A
 
   /**
    * A SQL statement to be executed.
@@ -16,7 +16,7 @@ trait Runner[A] {
 
   def run(queryExecutor: QueryExecutor): Response[A] = {
     val response = queryExecutor.execute(statement)
-    val result = mapResultSet(response.rsTraversable)
+    val result = mapResultSet(response.rsIterator)
     Response(result, response.underlying)
   }
 }
@@ -26,10 +26,10 @@ object Runner {
   /**
    * A factory method to instantiate Runner.
    */
-  def apply[A](stmt: SQLSyntax)(mapper: Traversable[WrappedResultSet] => A): Runner[A] = new Runner[A] {
+  def apply[A](stmt: SQLSyntax)(mapper: Iterator[WrappedResultSet] => A): Runner[A] = new Runner[A] {
 
     def statement: SQLSyntax = stmt
 
-    protected def mapResultSet(rsTraversable: Traversable[WrappedResultSet]): A = mapper(rsTraversable)
+    protected def mapResultSet(rsIterator: Iterator[WrappedResultSet]): A = mapper(rsIterator)
   }
 }

@@ -15,10 +15,10 @@ class OneToManyExtractor[TOne, TMany, TResult](
 
   def single: Runner[Option[TResult]] = Runner(statement)(mapOneToMany(_).headOption)
 
-  private[this] def mapOneToMany(rsTraversable: Traversable[WrappedResultSet]): Seq[TResult] = {
+  private[this] def mapOneToMany(rsIterator: Iterator[WrappedResultSet]): Seq[TResult] = {
     val buffer = mutable.LinkedHashMap.empty[TOne, Seq[TMany]]
 
-    rsTraversable.foreach { rs =>
+    rsIterator.foreach { rs =>
       val one = f(rs)
       val current = buffer.getOrElse(one, Vector.empty)
 
