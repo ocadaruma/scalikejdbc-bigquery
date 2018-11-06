@@ -11,9 +11,18 @@ class OneToManyExtractor[TOne, TMany, TResult](
   h: (TOne, Seq[TMany]) => TResult
 ) {
 
-  def list: Runner[Seq[TResult]] = Runner(statement)(mapOneToMany)
+  def list: Runner[Seq[TResult]] = Runner(statement)(mapOneToMany(_).toList)
 
-  def single: Runner[Option[TResult]] = Runner(statement)(mapOneToMany(_).headOption)
+  def single: Runner[Option[TResult]] = Runner(statement){ rs =>
+    val rows = mapOneToMany(rs).toList
+    rows match {
+      case Nil => None
+      case one :: Nil => Option(one)
+      case _ => throw TooManyRowsException(1, rows.size)
+    }
+  }
+
+  def first: Runner[Option[TResult]] = Runner(statement)(mapOneToMany(_).headOption)
 
   private[this] def mapOneToMany(rsIterator: Iterator[WrappedResultSet]): Seq[TResult] = {
     val buffer = mutable.LinkedHashMap.empty[TOne, Seq[TMany]]
