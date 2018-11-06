@@ -5,7 +5,7 @@ import scalikejdbc._
 
 class WrappedQueryResponse(
   private[bigquery] val underlying: TableResult,
-  private[bigquery] val rsTraversable: Traversable[WrappedResultSet])
+  private[bigquery] val rsIterator: Iterator[WrappedResultSet])
 
 class QueryExecutor(bigQuery: BigQuery, config: QueryConfig) {
 
@@ -19,6 +19,6 @@ class QueryExecutor(bigQuery: BigQuery, config: QueryConfig) {
     val response = bigQuery.query(request)
     val rs = new BqResultSet(response)
 
-    new WrappedQueryResponse(response, new ResultSetTraversable(rs))
+    new WrappedQueryResponse(response, new ResultSetIterator(rs))
   }
 }

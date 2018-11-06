@@ -1,6 +1,5 @@
 package scalikejdbc.bigquery
 
-import com.google.cloud.bigquery.QueryResponse
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.FunSpec
 import scalikejdbc._
@@ -20,7 +19,7 @@ class ExtractorTest extends FunSpec with MockFactory {
 
       // stub executor
       val executorStub = stub[QueryExecutor]
-      val responseStub = new WrappedQueryResponse(null, Seq(user1, user2, user3)) // FIXME: stub underlying QueryResponse appropriately (other than null)
+      val responseStub = new WrappedQueryResponse(null, Iterator(user1, user2, user3)) // FIXME: stub underlying QueryResponse appropriately (other than null)
       (executorStub.execute _).when(statement).returns(responseStub)
 
       assert(extractor.list.run(executorStub).result == Seq(1, 2, 3))
@@ -33,7 +32,7 @@ class ExtractorTest extends FunSpec with MockFactory {
 
       // stub executor
       val executorStub = stub[QueryExecutor]
-      val responseStub = new WrappedQueryResponse(null, Nil)
+      val responseStub = new WrappedQueryResponse(null, Iterator.empty)
       (executorStub.execute _).when(statement).returns(responseStub)
 
       assert(extractor.list.run(executorStub).result == Nil)
@@ -51,7 +50,7 @@ class ExtractorTest extends FunSpec with MockFactory {
 
       // stub executor
       val executorStub = stub[QueryExecutor]
-      val responseStub = new WrappedQueryResponse(null, Seq(user))
+      val responseStub = new WrappedQueryResponse(null, Iterator(user))
       (executorStub.execute _).when(statement).returns(responseStub)
 
       assert(extractor.single.run(executorStub).result == Some(1))
@@ -64,7 +63,7 @@ class ExtractorTest extends FunSpec with MockFactory {
 
       // stub executor
       val executorStub = stub[QueryExecutor]
-      val responseStub = new WrappedQueryResponse(null, Nil)
+      val responseStub = new WrappedQueryResponse(null, Iterator.empty)
       (executorStub.execute _).when(statement).returns(responseStub)
 
       assert(extractor.single.run(executorStub).result == None)

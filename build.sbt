@@ -20,7 +20,7 @@ configs(IntegrationTest)
 
 inConfig(IntegrationTest)(Defaults.itSettings)
 
-val scalikejdbcVersion = "3.0.0"
+val scalikejdbcVersion = "3.3.0"
 val googleCloudVersion = "1.41.0"
 
 libraryDependencies ++= Seq(
