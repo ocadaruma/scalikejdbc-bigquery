@@ -2,6 +2,8 @@ package scalikejdbc.bigquery
 
 import scalikejdbc._
 
+import scala.collection.immutable.Stream.Empty
+
 class Extractor[A](statement: SQLSyntax, f: WrappedResultSet => A) {
 
   def iterator: Runner[Iterator[A]] = Runner(statement)(_.map(f))
@@ -9,10 +11,10 @@ class Extractor[A](statement: SQLSyntax, f: WrappedResultSet => A) {
   def list: Runner[Seq[A]] = Runner(statement)(_.map(f).toList)
 
   def single: Runner[Option[A]] = Runner(statement) { rs =>
-    val rows = (rs map f).toList
+    val rows = (rs map f).toStream
     rows match {
-      case Nil => None
-      case one :: Nil => Option(one)
+      case Empty => None
+      case one #:: Empty => Option(one)
       case _ => throw TooManyRowsException(1, rows.size)
     }
   }

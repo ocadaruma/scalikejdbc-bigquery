@@ -2,6 +2,7 @@ package scalikejdbc.bigquery
 
 import scalikejdbc._
 
+import scala.collection.immutable.Stream.Empty
 import scala.collection.mutable
 
 class OneToManyExtractor[TOne, TMany, TResult](
@@ -14,10 +15,10 @@ class OneToManyExtractor[TOne, TMany, TResult](
   def list: Runner[Seq[TResult]] = Runner(statement)(mapOneToMany(_).toList)
 
   def single: Runner[Option[TResult]] = Runner(statement){ rs =>
-    val rows = mapOneToMany(rs).toList
+    val rows = mapOneToMany(rs).toStream
     rows match {
-      case Nil => None
-      case one :: Nil => Option(one)
+      case Empty => None
+      case one #:: Empty => Option(one)
       case _ => throw TooManyRowsException(1, rows.size)
     }
   }
