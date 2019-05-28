@@ -12,7 +12,7 @@ val scala211 = "2.11.8"
 
 scalaVersion := scala211
 
-crossScalaVersions := Seq(scala211, "2.12.6")
+crossScalaVersions := Seq(scala211, "2.12.9")
 
 scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature")
 
@@ -20,8 +20,8 @@ configs(IntegrationTest)
 
 inConfig(IntegrationTest)(Defaults.itSettings)
 
-val scalikejdbcVersion = "3.3.0"
-val googleCloudVersion = "1.51.0"
+val scalikejdbcVersion = "3.4.0-RC1"
+val googleCloudVersion = "1.75.0"
 
 libraryDependencies ++= Seq(
   "org.scalikejdbc" %% "scalikejdbc" % scalikejdbcVersion % "provided,it,test",
