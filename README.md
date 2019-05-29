@@ -14,7 +14,7 @@ ScalikeJDBC extension for Google BigQuery
 
 ```scala
 libraryDependencies ++= Seq(
-  "com.mayreh" %% "scalikejdbc-bigquery" % "0.1.2",
+  "com.mayreh" %% "scalikejdbc-bigquery" % "0.1.3",
   "com.google.cloud" % "google-cloud-bigquery" % "1.51.0",
   "org.scalikejdbc" %% "scalikejdbc" % scalikejdbcVersion // specify scalikejdbc version you want. 
 )
