@@ -12,7 +12,7 @@ val scala211 = "2.11.8"
 
 scalaVersion := scala211
 
-crossScalaVersions := Seq(scala211, "2.12.9")
+crossScalaVersions := Seq(scala211, "2.12.8")
 
 scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature")
 
