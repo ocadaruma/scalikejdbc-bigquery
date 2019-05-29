@@ -4,7 +4,7 @@ organization := "com.mayreh"
 
 licenses += (("Apache-2.0", url("https://raw.githubusercontent.com/ocadaruma/scalikejdbc-bigquery/master/LICENSE")))
 
-version := "0.1.3-SNAPSHOT"
+version := "0.1.3"
 
 publishMavenStyle := true
 
