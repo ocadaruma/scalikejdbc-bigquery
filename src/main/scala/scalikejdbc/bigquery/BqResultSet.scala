@@ -14,14 +14,14 @@ import scala.collection.JavaConverters._
 
 class BqResultSet(underlying: TableResult) extends ResultSet {
 
-  private[this] val resultIterator: Iterator[Seq[FieldValue]] = underlying.iterateAll().asScala.map(_.asScala).iterator
+  private[this] val resultIterator: Iterator[collection.Seq[FieldValue]] = underlying.iterateAll().asScala.map(_.asScala).iterator
 
   private[this] val columnNameIndexMap: Map[String, Int] = Option(underlying.getSchema)
     .fold(Map.empty[String, Int]) {
       _.getFields.asScala.zipWithIndex.map { case (field, index) => (field.getName, index) }.toMap
     }
 
-  private[this] var current: Seq[FieldValue] = null
+  private[this] var current: collection.Seq[FieldValue] = null
 
   private[this] def sqlTimestampFromEpochMicro(epochMicro: Long): Timestamp = {
     val micro = 1000000L

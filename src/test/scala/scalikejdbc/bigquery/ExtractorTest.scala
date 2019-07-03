@@ -2,7 +2,7 @@ package scalikejdbc.bigquery
 
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.FunSpec
-import scalikejdbc._
+import scalikejdbc.{Extractor => _, _}
 
 class ExtractorTest extends FunSpec with MockFactory {
 

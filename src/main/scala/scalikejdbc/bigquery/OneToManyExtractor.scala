@@ -35,9 +35,9 @@ class OneToManyExtractor[TOne, TMany, TResult](
       buffer(one) = current ++ g(rs).toSeq
     }
 
-    buffer.map { case (one, many) =>
+    buffer.iterator.map { case (one, many) =>
       h(one, many)
-    }(collection.breakOut)
+    }.toSeq
   }
 }
 
