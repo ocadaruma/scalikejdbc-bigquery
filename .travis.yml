@@ -9,7 +9,7 @@ scala:
   - 2.13.0
 
 jdk:
-  - oraclejdk8
+  - openjdk8
 
 before_script:
   - echo ${GCLOUD_SERVICE_KEY} | base64 --decode > ${GCLOUD_SERVICE_KEY_LOCATION}
