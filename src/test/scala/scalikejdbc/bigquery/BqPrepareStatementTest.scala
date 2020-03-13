@@ -1,12 +1,12 @@
 package scalikejdbc.bigquery
 
-import java.sql.{Timestamp, Date}
-import java.time.{ZoneId, ZonedDateTime, LocalDate}
-import java.util.{TimeZone, Calendar}
+import java.sql.{Date, Timestamp}
+import java.time.{LocalDate, ZoneId, ZonedDateTime}
+import java.util.Calendar
 
-import org.scalatest.FlatSpec
+import org.scalatest.flatspec.AnyFlatSpec
 
-class BqPrepareStatementTest extends FlatSpec {
+class BqPrepareStatementTest extends AnyFlatSpec {
 
   it should "holds parameter and indices correctly" in {
 

@@ -1,10 +1,10 @@
 package scalikejdbc.bigquery
 
 import org.scalamock.scalatest.MockFactory
-import org.scalatest.FunSpec
+import org.scalatest.funspec.AnyFunSpec
 import scalikejdbc.{Extractor => _, OneToManyExtractor => _, _}
 
-class OneToManyExtractorTest extends FunSpec with MockFactory {
+class OneToManyExtractorTest extends AnyFunSpec with MockFactory {
 
   describe("list") {
     it("should return list of aggregated rows") {
@@ -38,7 +38,7 @@ class OneToManyExtractorTest extends FunSpec with MockFactory {
       val responseStub = new WrappedQueryResponse(null, Iterator.empty)
       (executorStub.execute _).when(statement).returns(responseStub)
 
-      assert(extractor.list.run(executorStub).result == Nil)
+      assert(extractor.list.run(executorStub).result.isEmpty)
     }
   }
 
@@ -58,7 +58,7 @@ class OneToManyExtractorTest extends FunSpec with MockFactory {
       val responseStub = new WrappedQueryResponse(null, Iterator(post1_tag1, post1_tag2, post1_tag3))
       (executorStub.execute _).when(statement).returns(responseStub)
 
-      assert(extractor.single.run(executorStub).result == Some((1, Seq(101, 102, 103))))
+      assert(extractor.single.run(executorStub).result.contains((1, Seq(101, 102, 103))))
     }
 
     it("should return None when result is empty") {
@@ -71,7 +71,7 @@ class OneToManyExtractorTest extends FunSpec with MockFactory {
       val responseStub = new WrappedQueryResponse(null, Iterator.empty)
       (executorStub.execute _).when(statement).returns(responseStub)
 
-      assert(extractor.single.run(executorStub).result == None)
+      assert(extractor.single.run(executorStub).result.isEmpty)
     }
 
     it("should throw exception when result is two or more") {
@@ -117,7 +117,7 @@ class OneToManyExtractorTest extends FunSpec with MockFactory {
       val responseStub = new WrappedQueryResponse(null, Iterator(post1_tag1, post1_tag2, post1_tag3, post2_tag1, post2_tag2, post3))
       (executorStub.execute _).when(statement).returns(responseStub)
 
-      assert(extractor.first.run(executorStub).result == Some((1, Seq(101, 102, 103))))
+      assert(extractor.first.run(executorStub).result.contains((1, Seq(101, 102, 103))))
     }
 
     it("should return None when result is emptyy") {
@@ -130,7 +130,7 @@ class OneToManyExtractorTest extends FunSpec with MockFactory {
       val responseStub = new WrappedQueryResponse(null, Iterator.empty)
       (executorStub.execute _).when(statement).returns(responseStub)
 
-      assert(extractor.first.run(executorStub).result == None)
+      assert(extractor.first.run(executorStub).result.isEmpty)
     }
   }
 }

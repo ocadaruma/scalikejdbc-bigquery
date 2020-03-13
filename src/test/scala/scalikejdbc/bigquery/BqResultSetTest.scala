@@ -3,9 +3,9 @@ package scalikejdbc.bigquery
 import java.time.{LocalDate, LocalTime, ZoneId, ZonedDateTime}
 
 import com.google.cloud.bigquery._
-import org.scalatest.FlatSpec
+import org.scalatest.flatspec.AnyFlatSpec
 
-class BqResultSetTest extends FlatSpec {
+class BqResultSetTest extends AnyFlatSpec {
 
   it should "be able to instantiate from null Schema" in {
     val tableResult = MockUtil.tableResultFromSeq(Nil, null)
