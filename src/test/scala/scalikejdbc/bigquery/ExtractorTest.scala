@@ -1,10 +1,10 @@
 package scalikejdbc.bigquery
 
 import org.scalamock.scalatest.MockFactory
-import org.scalatest.FunSpec
+import org.scalatest.funspec.AnyFunSpec
 import scalikejdbc.{Extractor => _, _}
 
-class ExtractorTest extends FunSpec with MockFactory {
+class ExtractorTest extends AnyFunSpec with MockFactory {
 
   describe("iterator") {
     it("should return iterator of rows") {
@@ -86,7 +86,7 @@ class ExtractorTest extends FunSpec with MockFactory {
       val responseStub = new WrappedQueryResponse(null, Iterator(user))
       (executorStub.execute _).when(statement).returns(responseStub)
 
-      assert(extractor.single.run(executorStub).result == Some(1))
+      assert(extractor.single.run(executorStub).result.contains(1))
     }
 
     it("should return None when result is empty") {
@@ -99,7 +99,7 @@ class ExtractorTest extends FunSpec with MockFactory {
       val responseStub = new WrappedQueryResponse(null, Iterator.empty)
       (executorStub.execute _).when(statement).returns(responseStub)
 
-      assert(extractor.single.run(executorStub).result == None)
+      assert(extractor.single.run(executorStub).result.isEmpty)
     }
 
     it("should throw exception when result is two or more") {
@@ -138,7 +138,7 @@ class ExtractorTest extends FunSpec with MockFactory {
       val responseStub = new WrappedQueryResponse(null, Iterator(user1, user2, user3))
       (executorStub.execute _).when(statement).returns(responseStub)
 
-      assert(extractor.first.run(executorStub).result == Option(1))
+      assert(extractor.first.run(executorStub).result.contains(1))
     }
 
     it("should return None when result is empty") {
@@ -151,7 +151,7 @@ class ExtractorTest extends FunSpec with MockFactory {
       val responseStub = new WrappedQueryResponse(null, Iterator.empty)
       (executorStub.execute _).when(statement).returns(responseStub)
 
-      assert(extractor.first.run(executorStub).result == None)
+      assert(extractor.first.run(executorStub).result.isEmpty)
     }
   }
 }

@@ -3,10 +3,10 @@ package scalikejdbc.bigquery
 import java.time.{ZonedDateTime, ZoneId}
 
 import com.google.cloud.bigquery.DatasetId
-import org.scalatest.FlatSpec
+import org.scalatest.flatspec.AnyFlatSpec
 import scalikejdbc._
 
-class QueryDSLIntegration extends FlatSpec with BigQueryFixture {
+class QueryDSLIntegration extends AnyFlatSpec with BigQueryFixture {
 
   /* ========================
   Suppose that tables and rows like following exist in DataSet:"scalikejdbc_bigquery_integration".
@@ -158,7 +158,7 @@ class QueryDSLIntegration extends FlatSpec with BigQueryFixture {
       .single
       .run(executor)
 
-    assert(response.result == None)
+    assert(response.result.isEmpty)
   }
 
 }
